@@ -229,6 +229,14 @@ class Query(object):
         # Don't do anything if nothing specified
         allnot = [not searchfilter, not returnparams]
         if not all(allnot) and self.mode == 'local':
+
+            # Disable DAP queries. We can do it only for public or for everybody
+            if self._isdapquery:
+                if config.access in ['public', 'collab']:
+                    raise NotImplementedError(
+                        'DAP spaxel queries are disabled in this version. '
+                        'We plan to reintroduce this feature in the future.')
+
             # create query parameter ModelClasses
             self._create_query_modelclasses()
             # this adds spaxel x, y into default for query 1 dap zonal query
